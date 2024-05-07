@@ -1,4 +1,6 @@
 using Hero;
+using Infrastructure.Services;
+using Infrastructure.Services.EventHandler;
 using UnityEngine;
 
 namespace GameLogic
@@ -9,7 +11,8 @@ namespace GameLogic
         {
             if (other.TryGetComponent<HeroMove>(out var hero))
             {
-                Debug.LogError("finished");
+                var gameEventHandlerService = AllServices.Container.Single<IGameEventHandlerService>();
+                gameEventHandlerService.InvokeOnFinishGame();
             }
         }
     }

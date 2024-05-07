@@ -1,24 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Enemy
 {
-    public class EnemyWalkableAIController : MonoBehaviour
+    public class EnemyWalkableAIController : BaseAIEnemy
     {
-        [SerializeField] private NavMeshAgent agent;
-        [SerializeField] private Transform[] waypoints;
-        [SerializeField] private float fieldOfViewAngle = 45f;
-
-        private int playerLayer;
-        private Transform player;
+        private readonly List<Transform> waypoints = new();
+        
         private int currentWaypointIndex;
-
-        private void Start()
-        {
-            player = GameObject.FindGameObjectWithTag("Player").transform;
-            playerLayer = LayerMask.NameToLayer("Hero");
-            SetNextWaypoint();
-        }
 
         private void Update()
         {
@@ -26,46 +15,44 @@ namespace Enemy
             {
                 agent.SetDestination(player.position);
             }
-            else if (!agent.pathPending && agent.remainingDistance < 0.5f)
+            else if (agent.enabled && !agent.pathPending && agent.remainingDistance < 0.5f)
             {
                 SetNextWaypoint();
             }
         }
 
-        private void SetNextWaypoint()
+        public override void Initialize(Transform point, GameObject hero)
         {
-            if (waypoints.Length == 0) return;
-
-            agent.SetDestination(waypoints[currentWaypointIndex].position);
-            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Length;
-        }
-
-        private bool IsPlayerVisible()
-        {
-            Vector3 directionToPlayer = player.position - transform.position;
-            float playerDetectionRange = directionToPlayer.magnitude;
+            player = hero.transform;
             
-            float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+            transform.position = point.position;
+            transform.rotation = point.rotation;
 
-            if (angleToPlayer <= fieldOfViewAngle * 0.5f)
+            for (int i = 0; i < point.childCount; i++)
             {
-                if (Physics.Raycast(transform.position, directionToPlayer, out var hit, playerDetectionRange))
-                {
-                    if (hit.collider.gameObject.layer == playerLayer)
-                    {
-                        return true;
-                    }
-                }
+                var wayPoint = point.GetChild(i);
+                waypoints.Add(wayPoint);
             }
             
-            return false;
+            agent.enabled = true;
+            
+            SetNextWaypoint();
+            GenerateId();
+        }
+
+        private void SetNextWaypoint()
+        {
+            if (waypoints.Count == 0) return;
+
+            agent.SetDestination(waypoints[currentWaypointIndex].position);
+            currentWaypointIndex = (currentWaypointIndex + 1) % waypoints.Count;
         }
 
         private void OnDrawGizmos()
         {
             Gizmos.color=Color.magenta;
             
-            /*ector3 directionToPlayer = player.position - transform.position;
+            Vector3 directionToPlayer = player.position - transform.position;
             float playerDetectionRange = directionToPlayer.magnitude;
             
             float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
@@ -73,7 +60,7 @@ namespace Enemy
             if (angleToPlayer <= fieldOfViewAngle * 0.5f)
             { 
                 Gizmos.DrawRay(transform.position, directionToPlayer);
-            }*/
+            }
         }
     }
 }

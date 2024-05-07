@@ -144,11 +144,11 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4719341817930861602}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.7
-  m_Speed: 2
-  m_Acceleration: 6
+  m_Speed: 3
+  m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 100
   m_StoppingDistance: 1
@@ -171,6 +171,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 698d21d4f3847c942a1ccc5b09c69974, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  patrollingType: 0
   agent: {fileID: 1884666857709056579}
-  waypoints: []
   fieldOfViewAngle: 60

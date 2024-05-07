@@ -33,6 +33,7 @@ namespace Infrastructure.State
         private PlayerProgress NewProgress()
         {
             var progress = new PlayerProgress(initialLevel: "LabyrinthScene");
+            progress.WorldData.GameData.TotalSeconds = 240;
             return progress;
         }
     }

@@ -3,7 +3,6 @@ using Enemy;
 using Infrastructure.AssetManagement;
 using Infrastructure.Services.PersistentProgress;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Infrastructure.Factory
 {
@@ -29,18 +28,14 @@ namespace Infrastructure.Factory
             return HeroGameObject;
         }
 
-        public GameObject CreateHud()
-        {
-            var hud = InstantiateRegister(AssetsPath.HUD);
-            return hud;
-        }
+        public GameObject CreateHud() => InstantiateRegister(AssetsPath.HUD);
 
         public GameObject CreateEnemy(PatrollingType type)
         {
             return type switch
             {
-                PatrollingType.Walkable => assetProvider.Instantiate(AssetsPath.WalkableEnemy),
-                PatrollingType.Immovable => assetProvider.Instantiate(AssetsPath.ImmovableEnemy),
+                PatrollingType.Walkable => InstantiateRegister(AssetsPath.WalkableEnemy),
+                PatrollingType.Immovable => InstantiateRegister(AssetsPath.ImmovableEnemy),
                 _ => null
             };
         }
@@ -65,20 +60,6 @@ namespace Infrastructure.Factory
                 ProgressesWriters.Add(progressWriter);
             
             ProgressReaders.Add(progressReader);
-        }
-
-        private GameObject InstantiateRegister(GameObject prefab, Vector3 at)
-        {
-            GameObject gameObject = Object.Instantiate(prefab, at, Quaternion.identity);
-            RegisterProgressWatchers(gameObject);
-            return gameObject;
-        }
-
-        private GameObject InstantiateRegister(GameObject prefab)
-        {
-            GameObject gameObject = Object.Instantiate(prefab);
-            RegisterProgressWatchers(gameObject);
-            return gameObject;
         }
 
         private GameObject InstantiateRegister(string prefabPath, Vector3 at)

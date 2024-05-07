@@ -1,6 +1,7 @@
 ﻿using Infrastructure.AssetManagement;
 using Infrastructure.Factory;
 using Infrastructure.Services;
+using Infrastructure.Services.EventHandler;
 using Infrastructure.Services.Input;
 using Infrastructure.Services.PersistentProgress;
 using Infrastructure.Services.SaveLoad;
@@ -10,7 +11,7 @@ namespace Infrastructure.State
 {
     public class BootstrapState : IState
     {
-        private const string SceneName = "Initial";
+        private const string SceneName = "BootScene";
         
         private readonly GameStateMachine gameStateMachine;
         private readonly SceneLoader sceneLoader;
@@ -43,6 +44,7 @@ namespace Infrastructure.State
             allServices.RegisterSingle(InputService());
             allServices.RegisterSingle<IAssetProvider>(new AssetProvider());
             allServices.RegisterSingle<IPersistentProgressService>(new PersistentProgressService());
+            allServices.RegisterSingle<IGameEventHandlerService>(new GameEventHandlerService());
             
             allServices.RegisterSingle<IGameFactory>(new GameFactory(
                 allServices.Single<IAssetProvider>(),  

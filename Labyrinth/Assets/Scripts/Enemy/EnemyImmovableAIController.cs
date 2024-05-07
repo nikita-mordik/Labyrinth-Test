@@ -1,21 +1,11 @@
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace Enemy
 {
-    public class EnemyImmovableAIController : MonoBehaviour
+    public class EnemyImmovableAIController : BaseAIEnemy
     {
-        [SerializeField] private NavMeshAgent agent;
-        [SerializeField] private float fieldOfViewAngle = 45f;
-
-        private int playerLayer;
-        private Transform player;
-
-        private void Start()
-        {
-            player = GameObject.FindGameObjectWithTag("Player").transform;
-            playerLayer = LayerMask.NameToLayer("Hero");
-        }
+        private Vector3 initialPosition;
+        private Quaternion initialRotation;
 
         private void Update()
         {
@@ -23,34 +13,35 @@ namespace Enemy
             {
                 agent.SetDestination(player.position);
             }
-        }
-
-        private bool IsPlayerVisible()
-        {
-            Vector3 directionToPlayer = player.position - transform.position;
-            float playerDetectionRange = directionToPlayer.magnitude;
-            
-            float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
-
-            if (angleToPlayer <= fieldOfViewAngle * 0.5f)
+            else if (agent.enabled && !agent.pathPending && agent.remainingDistance < 0.5f)
             {
-                if (Physics.Raycast(transform.position, directionToPlayer, out var hit, playerDetectionRange))
+                agent.SetDestination(initialPosition);
+                if (agent.remainingDistance <= agent.stoppingDistance)
                 {
-                    if (hit.collider.gameObject.layer == playerLayer)
-                    {
-                        return true;
-                    }
+                    transform.rotation = initialRotation;
                 }
             }
+        }
+
+        public override void Initialize(Transform point, GameObject hero)
+        {
+            player = hero.transform;
+
+            transform.position = point.position;
+            transform.rotation = point.rotation;
             
-            return false;
+            initialPosition = transform.position;
+            initialRotation = transform.rotation;
+            agent.enabled = true;
+            
+            GenerateId();
         }
 
         private void OnDrawGizmos()
         {
             Gizmos.color=Color.magenta;
             
-            /*ector3 directionToPlayer = player.position - transform.position;
+            Vector3 directionToPlayer = player.position - transform.position;
             float playerDetectionRange = directionToPlayer.magnitude;
             
             float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
@@ -58,7 +49,7 @@ namespace Enemy
             if (angleToPlayer <= fieldOfViewAngle * 0.5f)
             { 
                 Gizmos.DrawRay(transform.position, directionToPlayer);
-            }*/
+            }
         }
     }
 }

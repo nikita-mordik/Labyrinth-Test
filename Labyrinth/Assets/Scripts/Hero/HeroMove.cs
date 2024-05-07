@@ -1,6 +1,5 @@
 ﻿using Common;
 using Data;
-using Infrastructure.Services;
 using Infrastructure.Services.Input;
 using Infrastructure.Services.PersistentProgress;
 using UnityEngine;
@@ -16,9 +15,13 @@ namespace Hero
         private new Camera camera;
         private IInputService inputService;
 
+        public void Construct(IInputService input)
+        {
+            inputService = input;
+        }
+        
         private void Awake()
         {
-            inputService = AllServices.Container.Single<IInputService>();
             camera = Camera.main;
         }
 
@@ -62,9 +65,7 @@ namespace Hero
             characterController.enabled = true;
         }
 
-        private static string CurrentLevel()
-        {
-            return SceneManager.GetActiveScene().name;
-        }
+        private static string CurrentLevel() => 
+            SceneManager.GetActiveScene().name;
     }
 }
