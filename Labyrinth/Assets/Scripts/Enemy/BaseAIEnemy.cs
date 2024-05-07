@@ -1,6 +1,6 @@
-using System;
 using System.Linq;
 using Data;
+using Infrastructure.Services.Identifiers;
 using Infrastructure.Services.PersistentProgress;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,14 +9,20 @@ namespace Enemy
 {
     public abstract class BaseAIEnemy : MonoBehaviour, ISavedProgress
     {
-        [SerializeField] protected PatrollingType patrollingType;
         [SerializeField] protected NavMeshAgent agent;
         [SerializeField] protected float fieldOfViewAngle = 60f;
 
         protected Transform player;
-        protected string uniqueId;
         
+        private string uniqueId;
         private int playerLayer;
+        
+        private IIdentifierService identifierService;
+
+        public void Construct(IIdentifierService identifierService)
+        {
+            this.identifierService = identifierService;
+        }
 
         private void Awake()
         {
@@ -26,7 +32,7 @@ namespace Enemy
         public abstract void Initialize(Transform point, GameObject hero);
 
         protected void GenerateId() => 
-            uniqueId = $"{gameObject.scene.name}_{Guid.NewGuid().ToString()}";
+            uniqueId = $"{identifierService.Next()}";
 
         protected bool IsPlayerVisible()
         {

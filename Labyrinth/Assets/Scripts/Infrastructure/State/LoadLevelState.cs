@@ -3,6 +3,7 @@ using Enemy;
 using Hero;
 using Infrastructure.Factory;
 using Infrastructure.Services.EventHandler;
+using Infrastructure.Services.Identifiers;
 using Infrastructure.Services.Input;
 using Infrastructure.Services.PersistentProgress;
 using Infrastructure.Services.SaveLoad;
@@ -20,10 +21,11 @@ namespace Infrastructure.State
         private readonly IGameEventHandlerService gameEventHandlerService;
         private readonly IInputService inputService;
         private readonly ISaveLoadService saveLoadService;
+        private readonly IIdentifierService identifierService;
 
         public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, IGameFactory gameFactory,
             IPersistentProgressService progressService, IGameEventHandlerService gameEventHandlerService, 
-            IInputService inputService, ISaveLoadService saveLoadService)
+            IInputService inputService, ISaveLoadService saveLoadService, IIdentifierService identifierService)
         {
             this.gameStateMachine = gameStateMachine;
             this.sceneLoader = sceneLoader;
@@ -32,6 +34,7 @@ namespace Infrastructure.State
             this.gameEventHandlerService = gameEventHandlerService;
             this.inputService = inputService;
             this.saveLoadService = saveLoadService;
+            this.identifierService = identifierService;
         }
 
         public async void Enter(string sceneName)
@@ -76,6 +79,7 @@ namespace Infrastructure.State
             {
                 var point = immovablePoints[i].transform;
                 var enemy = gameFactory.CreateEnemy(PatrollingType.Immovable);
+                enemy.GetComponent<BaseAIEnemy>().Construct(identifierService);
                 enemy.GetComponent<EnemyImmovableAIController>()
                     .Initialize(point, hero);
             }
@@ -84,6 +88,7 @@ namespace Infrastructure.State
             {
                 var point = walkablePoints[i].transform;
                 var enemy = gameFactory.CreateEnemy(PatrollingType.Walkable);
+                enemy.GetComponent<BaseAIEnemy>().Construct(identifierService);
                 enemy.GetComponent<EnemyWalkableAIController>()
                     .Initialize(point, hero);
             }
