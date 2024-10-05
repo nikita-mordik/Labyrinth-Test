@@ -6,7 +6,7 @@ namespace FreedLOW._Maze.Scripts.Data
     public class MoneyData
     {
         public int Money { get; private set; }
-        public Action OnMoneyAmountChanged;
+        public Action<int> OnMoneyAmountChanged;
 
         public MoneyData(int money)
         {
@@ -16,7 +16,7 @@ namespace FreedLOW._Maze.Scripts.Data
         public void ChangeMoneyCount(int amount)
         {
             Money += amount;
-            OnMoneyAmountChanged?.Invoke();
+            OnMoneyAmountChanged?.Invoke(Money);
         }
     }
 }

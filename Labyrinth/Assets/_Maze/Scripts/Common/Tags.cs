@@ -5,5 +5,7 @@ namespace FreedLOW._Maze.Scripts.Common
         public const string HeroPoint = "HeroStartPoint";
         public const string ImmovablePoint = "ImmovableSpawnPoint";
         public const string WalkablePoint = "WalkableSpawnPoint";
+
+        public const string Hero = "Player";
     }
 }

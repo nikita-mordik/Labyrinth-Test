@@ -45,7 +45,7 @@ namespace FreedLOW._Maze.Scripts.UI.Panels.Menu
             _playerProgress.WorldData.MoneyData.OnMoneyAmountChanged -= MoneyAmountChanged;
         }
 
-        private void MoneyAmountChanged()
+        private void MoneyAmountChanged(int moneyCount)
         {
             UpdateMoneyData();
         }

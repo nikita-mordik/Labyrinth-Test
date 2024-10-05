@@ -7,7 +7,6 @@ using FreedLOW._Maze.Scripts.Infrastructure.Services.Identifiers;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.Input;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.PersistentProgress;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.SaveLoad;
-using FreedLOW._Maze.Scripts.UI;
 using FreedLOW._Maze.Scripts.UI.Panels.Game;
 using UnityEngine;
 
@@ -117,7 +116,7 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
         {
             GameObject hud = gameFactory.CreateHud();
             hud.GetComponentInChildren<GamePanel>()
-                .Construct(gameEventHandlerService);
+                .Construct(gameEventHandlerService, progressService);
             hud.GetComponentInChildren<AbilityPanel>()
                 .Construct(progressService, _heroStats);
             hud.GetComponentInChildren<PausePanel>()

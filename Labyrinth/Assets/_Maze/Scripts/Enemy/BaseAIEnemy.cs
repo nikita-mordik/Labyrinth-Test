@@ -27,7 +27,7 @@ namespace FreedLOW._Maze.Scripts.Enemy
 
         private void Awake()
         {
-            playerLayer = 1 << LayerMask.NameToLayer("Hero");
+            playerLayer = LayerMask.NameToLayer("Hero");
         }
 
         public abstract void Initialize(Transform point, GameObject hero);
@@ -48,7 +48,10 @@ namespace FreedLOW._Maze.Scripts.Enemy
                     if (hit.collider.gameObject.layer == playerLayer)
                     {
                         var heroMove = hit.collider.GetComponent<HeroMove>();
-                        return !heroMove.HasInvisibility;
+                        if (heroMove != null)
+                            return !heroMove.HasInvisibility;
+                        
+                        return true;
                     }
                 }
             }
