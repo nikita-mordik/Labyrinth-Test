@@ -3,6 +3,7 @@ using FreedLOW._Maze.Scripts.Infrastructure.Factory;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.PersistentProgress;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.SaveLoad;
 using FreedLOW._Maze.Scripts.Infrastructure.State;
+using FreedLOW._Maze.Scripts.Infrastructure.State.States;
 using UnityEngine;
 using UnityEngine.UI;
 

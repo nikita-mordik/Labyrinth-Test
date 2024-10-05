@@ -5,6 +5,7 @@ using FreedLOW._Maze.Scripts.Infrastructure.Factory;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.EventHandler;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.PersistentProgress;
 using FreedLOW._Maze.Scripts.Infrastructure.State;
+using FreedLOW._Maze.Scripts.Infrastructure.State.States;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

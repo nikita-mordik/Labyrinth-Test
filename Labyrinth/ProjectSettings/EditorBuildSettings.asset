@@ -9,6 +9,15 @@ EditorBuildSettings:
     path: Assets/_Maze/Scenes/BootScene.unity
     guid: 9e7987a2b38cf074dbbc2b6324086971
   - enabled: 1
-    path: Assets/_Maze/Scenes/LabyrinthScene.unity
+    path: Assets/_Maze/Scenes/MenuScene.unity
+    guid: 77b9c4593d6ec0e4c9232c96d93aa6b9
+  - enabled: 1
+    path: Assets/_Maze/Scenes/LabyrinthSceneOne.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/_Maze/Scenes/LabyrinthSceneTwo.unity
+    guid: f53dd037a4381434fba9329f2e28a3d8
+  - enabled: 1
+    path: Assets/_Maze/Scenes/LabyrinthSceneThree.unity
+    guid: 8c7bc59429b87e14f81626e75b58ac09
   m_configObjects: {}

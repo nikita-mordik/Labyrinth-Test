@@ -8,7 +8,7 @@ using FreedLOW._Maze.Scripts.Infrastructure.Services.PersistentProgress;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.SaveLoad;
 using UnityEngine;
 
-namespace FreedLOW._Maze.Scripts.Infrastructure.State
+namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
 {
     public class BootstrapState : IState
     {
@@ -48,21 +48,28 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State
             allServices.RegisterSingle<IGameEventHandlerService>(new GameEventHandlerService());
             allServices.RegisterSingle<IIdentifierService>(new IdentifierService());
             
-            allServices.RegisterSingle<IGameFactory>(new GameFactory(
-                allServices.Single<IAssetProvider>(),  
-                allServices.Single<IPersistentProgressService>()));
-            
+            RegisterFactories();
+
             allServices.RegisterSingle<ISaveLoadService>(new SaveLoadService(
                 allServices.Single<IGameFactory>(),
                 allServices.Single<IPersistentProgressService>()));
         }
-        
+
         private static IInputService InputService()
         {
             if (Application.isEditor)
                 return new StandaloneInputService();
             
             return new MobileInputService();
+        }
+
+        private void RegisterFactories()
+        {
+            allServices.RegisterSingle<IGameFactory>(new GameFactory(
+                allServices.Single<IAssetProvider>(),  
+                allServices.Single<IPersistentProgressService>()));
+
+            allServices.RegisterSingle<IUIFactory>(new UIFactory(allServices.Single<IAssetProvider>()));
         }
     }
 }

@@ -1,8 +1,9 @@
-﻿using FreedLOW._Maze.Scripts.Data;
+﻿using FreedLOW._Maze.Scripts.Common;
+using FreedLOW._Maze.Scripts.Data;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.PersistentProgress;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.SaveLoad;
 
-namespace FreedLOW._Maze.Scripts.Infrastructure.State
+namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
 {
     public class LoadProgressState : IState
     {
@@ -10,7 +11,8 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State
         private readonly IPersistentProgressService persistentProgressService;
         private readonly ISaveLoadService saveLoadService;
 
-        public LoadProgressState(GameStateMachine gameStateMachine, IPersistentProgressService persistentProgressService, ISaveLoadService saveLoadService)
+        public LoadProgressState(GameStateMachine gameStateMachine, IPersistentProgressService persistentProgressService, 
+            ISaveLoadService saveLoadService)
         {
             this.gameStateMachine = gameStateMachine;
             this.persistentProgressService = persistentProgressService;
@@ -20,19 +22,19 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State
         public void Enter()
         {
             LoadProgressOrInitNew();
-            gameStateMachine.Enter<LoadLevelState, string>(persistentProgressService.PlayerProgress.WorldData.PositionOnLevel.LevelName);
+            gameStateMachine.Enter<LoadMenuState>();
         }
 
         public void Exit() { }
 
         private void LoadProgressOrInitNew()
         {
-            persistentProgressService.PlayerProgress = saveLoadService.LoadProgress() ?? NewProgress();
+            persistentProgressService.PlayerProgress = saveLoadService.LoadProgress() ?? DefaultProgress();
         }
 
-        private PlayerProgress NewProgress()
+        private PlayerProgress DefaultProgress()
         {
-            var progress = new PlayerProgress(initialLevel: "LabyrinthScene");
+            var progress = new PlayerProgress(initialLevel: SceneNames.LevelOne);
             progress.WorldData.GameData.TotalSeconds = 240;
             return progress;
         }

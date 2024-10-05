@@ -1,21 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
+using FreedLOW._Maze.Scripts.Extension;
 using UnityEngine;
 
-namespace FreedLOW
+namespace FreedLOW._Maze.Scripts.UI.Panels
 {
     public class PanelMediator : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        [SerializeField] private CanvasGroup menuPanel;
+        [SerializeField] private CanvasGroup levelPanel;
+        [SerializeField] private CanvasGroup shopPanel;
+
+        public void OpenMenuPanel()
         {
-        
+            menuPanel.State(true);
+            levelPanel.State(false);
+            shopPanel.State(false);
         }
 
-        // Update is called once per frame
-        void Update()
+        public void OpenLevelPanel()
         {
-        
+            menuPanel.State(false);
+            levelPanel.State(true);
+            shopPanel.State(false);
+        }
+
+        public void OpenShopPanel()
+        {
+            menuPanel.State(false);
+            levelPanel.State(false);
+            shopPanel.State(true);
         }
     }
 }

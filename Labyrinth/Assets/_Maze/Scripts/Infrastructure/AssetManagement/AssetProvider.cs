@@ -15,5 +15,10 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.AssetManagement
             var gameObject = Resources.Load<GameObject>(path);
             return Object.Instantiate(gameObject, at, Quaternion.identity);
         }
+
+        public T Load<T>(string path) where T : Object
+        {
+            return Resources.Load<T>(path);
+        }
     }
 }

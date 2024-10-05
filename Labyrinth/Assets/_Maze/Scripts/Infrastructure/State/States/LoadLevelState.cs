@@ -10,7 +10,7 @@ using FreedLOW._Maze.Scripts.Infrastructure.Services.SaveLoad;
 using FreedLOW._Maze.Scripts.UI;
 using UnityEngine;
 
-namespace FreedLOW._Maze.Scripts.Infrastructure.State
+namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
 {
     public class LoadLevelState : IPayloadedState<string>
     {

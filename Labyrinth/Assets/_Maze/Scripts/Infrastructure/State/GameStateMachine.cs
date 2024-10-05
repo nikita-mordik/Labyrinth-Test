@@ -7,6 +7,7 @@ using FreedLOW._Maze.Scripts.Infrastructure.Services.Identifiers;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.Input;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.PersistentProgress;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.SaveLoad;
+using FreedLOW._Maze.Scripts.Infrastructure.State.States;
 
 namespace FreedLOW._Maze.Scripts.Infrastructure.State
 {
@@ -20,12 +21,13 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State
             states = new Dictionary<Type, IExitableState>()
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, services),
+                [typeof(LoadProgressState)] = new LoadProgressState(this, services.Single<IPersistentProgressService>(),
+                    services.Single<ISaveLoadService>()),
+                [typeof(LoadMenuState)] = new LoadMenuState(this, sceneLoader),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, services.Single<IGameFactory>(),
                     services.Single<IPersistentProgressService>(), services.Single<IGameEventHandlerService>(),
                     services.Single<IInputService>(), services.Single<ISaveLoadService>(),
                     services.Single<IIdentifierService>()),
-                [typeof(LoadProgressState)] = new LoadProgressState(this, services.Single<IPersistentProgressService>(),
-                    services.Single<ISaveLoadService>()),
                 [typeof(GameLoopState)] = new GameLoopState(this),
                 [typeof(PauseState)] = new PauseState(this),
             };

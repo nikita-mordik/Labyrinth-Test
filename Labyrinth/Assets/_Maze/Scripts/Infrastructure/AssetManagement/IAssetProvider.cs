@@ -7,6 +7,6 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.AssetManagement
     {
         GameObject Instantiate(string path);
         GameObject Instantiate(string path, Vector3 at);
-        //List<WeatherCoord> LoadWeatherCoords();
+        T Load<T>(string path) where T : Object;
     }
 }

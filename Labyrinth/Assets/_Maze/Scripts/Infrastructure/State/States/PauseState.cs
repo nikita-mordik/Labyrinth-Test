@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace FreedLOW._Maze.Scripts.Infrastructure.State
+namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
 {
     public class PauseState : IState
     {

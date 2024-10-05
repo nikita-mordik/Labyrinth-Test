@@ -1,4 +1,5 @@
 ﻿using FreedLOW._Maze.Scripts.Infrastructure.State;
+using FreedLOW._Maze.Scripts.Infrastructure.State.States;
 using UnityEngine;
 
 namespace FreedLOW._Maze.Scripts.Infrastructure
