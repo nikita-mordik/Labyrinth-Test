@@ -8,24 +8,24 @@ using FreedLOW._Maze.Scripts.Infrastructure.State;
 using FreedLOW._Maze.Scripts.Infrastructure.State.States;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace FreedLOW._Maze.Scripts.UI
+namespace FreedLOW._Maze.Scripts.UI.Panels.Game
 {
     public class EndGamePanel : MonoBehaviour
     {
         [SerializeField] private CanvasGroup endPanelGroup;
         [SerializeField] private TextMeshProUGUI finishText;
         [SerializeField] private Button restartButton;
+        [SerializeField] private Button nextLevelButton;
 
-        private bool isLoose;
-
-        private GameStateMachine stateMachine;
+        private IGameStateMachine stateMachine;
         private IGameEventHandlerService gameEventHandlerService;
         private IPersistentProgressService progressService;
         private IGameFactory gameFactory;
 
-        public void Construct(GameStateMachine stateMachine, IGameEventHandlerService gameEventHandlerService,
+        public void Construct(IGameStateMachine stateMachine, IGameEventHandlerService gameEventHandlerService,
             IPersistentProgressService progressService, IGameFactory gameFactory)
         {
             this.gameFactory = gameFactory;
@@ -41,6 +41,7 @@ namespace FreedLOW._Maze.Scripts.UI
         {
             endPanelGroup.State(false);
             restartButton.onClick.AddListener(OnRestart);
+            nextLevelButton.onClick.AddListener(OnLoadNextLevel);
         }
 
         private void OnDestroy()
@@ -52,41 +53,53 @@ namespace FreedLOW._Maze.Scripts.UI
         private void OnFinishGame()
         {
             finishText.text = "You are escape successfully!";
+            restartButton.gameObject.SetActive(false);
+            nextLevelButton.gameObject.SetActive(true);
             endPanelGroup.State(true);
-            isLoose = false;
             stateMachine.Enter<PauseState>();
         }
 
         private void OnLooseGame()
         {
             finishText.text = "You are not escape!";
+            restartButton.gameObject.SetActive(true);
+            nextLevelButton.gameObject.SetActive(false);
             endPanelGroup.State(true);
-            isLoose = true;
             stateMachine.Enter<PauseState>();
         }
 
         private void OnRestart()
         {
-            if (isLoose)
+            var progress = progressService.PlayerProgress;
+            progress.WorldData.GameData.TotalSeconds = 240;
+            progress.WorldData.GameData.AttemptsCount++;
+            progress.WorldData.PositionOnLevel.Position = GameObject.FindGameObjectWithTag(Tags.HeroPoint).transform
+                .position.AsVectorData();
+                
+            foreach (var progressReader in gameFactory.ProgressReaders)
             {
-                var progress = progressService.PlayerProgress;
-                progress.WorldData.GameData.TotalSeconds = 240;
-                progress.WorldData.GameData.AttemptsCount++;
-                progress.WorldData.PositionOnLevel.Position = GameObject.FindGameObjectWithTag(Tags.HeroPoint).transform
-                    .position.AsVectorData();
-                
-                foreach (var progressReader in gameFactory.ProgressReaders)
-                {
-                    progressReader.LoadProgress(progressService.PlayerProgress);
-                }
-                
-                endPanelGroup.State(false);
-                stateMachine.Enter<GameLoopState>();
+                progressReader.LoadProgress(progressService.PlayerProgress);
             }
-            else
+                
+            endPanelGroup.State(false);
+            stateMachine.Enter<GameLoopState>();
+        }
+
+        private void OnLoadNextLevel()
+        {
+            var activeSceneName = SceneManager.GetActiveScene().name;
+            
+            if (string.Equals(activeSceneName, SceneNames.LevelOne))
             {
-                PlayerPrefs.DeleteAll();
-                stateMachine.Enter<BootstrapState>();
+                stateMachine.Enter<LoadLevelState, string>(SceneNames.LevelTwo);
+            }
+            else if (string.Equals(activeSceneName, SceneNames.LevelTwo))
+            {
+                stateMachine.Enter<LoadLevelState, string>(SceneNames.LevelThree);
+            }
+            else if (string.Equals(activeSceneName, SceneNames.LevelThree))
+            {
+                stateMachine.Enter<LoadMenuState>();
             }
         }
     }

@@ -16,7 +16,7 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State
         private readonly Dictionary<Type, IExitableState> states;
         private IExitableState activeState;
 
-        public GameStateMachine(SceneLoader sceneLoader, AllServices services)
+        public GameStateMachine(ICoroutineRunner coroutine, SceneLoader sceneLoader, AllServices services)
         {
             states = new Dictionary<Type, IExitableState>()
             {
@@ -27,7 +27,7 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State
                 [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, services.Single<IGameFactory>(),
                     services.Single<IPersistentProgressService>(), services.Single<IGameEventHandlerService>(),
                     services.Single<IInputService>(), services.Single<ISaveLoadService>(),
-                    services.Single<IIdentifierService>()),
+                    services.Single<IIdentifierService>(), coroutine),
                 [typeof(GameLoopState)] = new GameLoopState(this),
                 [typeof(PauseState)] = new PauseState(this),
             };

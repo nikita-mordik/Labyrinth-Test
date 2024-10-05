@@ -7,9 +7,9 @@ namespace FreedLOW._Maze.Scripts.Infrastructure
     {
         public GameStateMachine StateMachine;
 
-        public Game()
+        public Game(ICoroutineRunner coroutine)
         {
-            StateMachine = new GameStateMachine(new SceneLoader(), AllServices.Container);
+            StateMachine = new GameStateMachine(coroutine, new SceneLoader(), AllServices.Container);
         }
     }
 }

@@ -24,13 +24,6 @@ namespace FreedLOW._Maze.Scripts.UI.Panels.Menu
             CreateWebView();
         }
 
-        private void OnDestroy()
-        {
-            _webView.Hide();
-            _webView.CleanCache();
-            _webView = null;
-        }
-
         private void OnOpenLevelPanel()
         {
             panelMediator.OpenLevelPanel();

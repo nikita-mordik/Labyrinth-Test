@@ -8,7 +8,9 @@ namespace FreedLOW._Maze.Scripts.Data
         private int _invisibilityCount;
         
         public bool HasInvisibility => _invisibilityCount > 0;
-        public Action OnInvisibilityCountChanged;
+        public int InvisibilityCount => _invisibilityCount;
+
+        public Action<int> OnInvisibilityCountChanged;
 
         public InvisibilityAbility(int invisibilityCount)
         {
@@ -18,7 +20,7 @@ namespace FreedLOW._Maze.Scripts.Data
         public void ChangeInvisibilityCount(int value)
         {
             _invisibilityCount += value;
-            OnInvisibilityCountChanged?.Invoke();
+            OnInvisibilityCountChanged?.Invoke(_invisibilityCount);
         }
     }
 }

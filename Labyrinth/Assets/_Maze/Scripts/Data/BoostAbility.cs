@@ -8,7 +8,9 @@ namespace FreedLOW._Maze.Scripts.Data
         private int _boostCount;
         
         public bool HasBoost => _boostCount > 0;
-        public Action OnBoostCountChanged;
+        public int BoostCount => _boostCount;
+
+        public Action<int> OnBoostCountChanged;
 
         public BoostAbility(int boostCount)
         {
@@ -18,7 +20,7 @@ namespace FreedLOW._Maze.Scripts.Data
         public void ChangeBoostCount(int value)
         {
             _boostCount += value;
-            OnBoostCountChanged?.Invoke();
+            OnBoostCountChanged?.Invoke(_boostCount);
         }
     }
 }

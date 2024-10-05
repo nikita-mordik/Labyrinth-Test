@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using FreedLOW._Maze.Scripts.Data;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.EventHandler;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.PersistentProgress;
+using FreedLOW._Maze.Scripts.UI.Panels.Game;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

@@ -7,21 +7,22 @@ using FreedLOW._Maze.Scripts.Infrastructure.State.States;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace FreedLOW._Maze.Scripts.UI
+namespace FreedLOW._Maze.Scripts.UI.Panels.Game
 {
     public class PausePanel : MonoBehaviour
     {
         [SerializeField] private CanvasGroup pauseGroup;
         [SerializeField] private Button saveButton;
         [SerializeField] private Button loadButton;
+        [SerializeField] private Button menuButton;
         [SerializeField] private Button backButton;
         
-        private GameStateMachine gameStateMachine;
+        private IGameStateMachine gameStateMachine;
         private ISaveLoadService saveLoadService;
         private IGameFactory gameFactory;
         private IPersistentProgressService progressService;
 
-        public void Construct(GameStateMachine gameStateMachine, ISaveLoadService saveLoadService,
+        public void Construct(IGameStateMachine gameStateMachine, ISaveLoadService saveLoadService,
             IGameFactory gameFactory, IPersistentProgressService progressService)
         {
             this.gameStateMachine = gameStateMachine;
@@ -36,7 +37,13 @@ namespace FreedLOW._Maze.Scripts.UI
             
             saveButton.onClick.AddListener(OnSaveProgress);
             loadButton.onClick.AddListener(OnLoadProgress);
+            menuButton.onClick.AddListener(OnLoadMenu);
             backButton.onClick.AddListener(OnBack);
+        }
+
+        private void OnLoadMenu()
+        {
+            gameStateMachine.Enter<LoadMenuState>();
         }
 
         public void ShowPausePanel()

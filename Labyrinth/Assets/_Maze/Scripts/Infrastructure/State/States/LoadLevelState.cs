@@ -8,6 +8,7 @@ using FreedLOW._Maze.Scripts.Infrastructure.Services.Input;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.PersistentProgress;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.SaveLoad;
 using FreedLOW._Maze.Scripts.UI;
+using FreedLOW._Maze.Scripts.UI.Panels.Game;
 using UnityEngine;
 
 namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
@@ -22,10 +23,14 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
         private readonly IInputService inputService;
         private readonly ISaveLoadService saveLoadService;
         private readonly IIdentifierService identifierService;
+        private readonly ICoroutineRunner _coroutineRunner;
+        
+        private HeroStats _heroStats;
 
         public LoadLevelState(GameStateMachine gameStateMachine, SceneLoader sceneLoader, IGameFactory gameFactory,
             IPersistentProgressService progressService, IGameEventHandlerService gameEventHandlerService, 
-            IInputService inputService, ISaveLoadService saveLoadService, IIdentifierService identifierService)
+            IInputService inputService, ISaveLoadService saveLoadService, IIdentifierService identifierService,
+            ICoroutineRunner coroutineRunner)
         {
             this.gameStateMachine = gameStateMachine;
             this.sceneLoader = sceneLoader;
@@ -35,6 +40,7 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
             this.inputService = inputService;
             this.saveLoadService = saveLoadService;
             this.identifierService = identifierService;
+            _coroutineRunner = coroutineRunner;
         }
 
         public async void Enter(string sceneName)
@@ -96,10 +102,12 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
 
         private GameObject InitializeHero(Vector3 at, Quaternion pointRotation)
         {
+            _heroStats = new HeroStats(3, _coroutineRunner);
+            
             var hero = gameFactory.CreateHero(at);
             hero.transform.rotation = pointRotation;
             hero.GetComponent<HeroMove>()
-                .Construct(inputService);
+                .Construct(inputService, _heroStats);
             hero.GetComponentInChildren<HeroDeath>()
                 .Construct(gameEventHandlerService);
             return hero;
@@ -110,6 +118,8 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
             GameObject hud = gameFactory.CreateHud();
             hud.GetComponentInChildren<GamePanel>()
                 .Construct(gameEventHandlerService);
+            hud.GetComponentInChildren<AbilityPanel>()
+                .Construct(progressService, _heroStats);
             hud.GetComponentInChildren<PausePanel>()
                 .Construct(gameStateMachine, saveLoadService, gameFactory, progressService);
             hud.GetComponentInChildren<EndGamePanel>()

@@ -1,5 +1,6 @@
 using System.Linq;
 using FreedLOW._Maze.Scripts.Data;
+using FreedLOW._Maze.Scripts.Hero;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.Identifiers;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.PersistentProgress;
 using UnityEngine;
@@ -26,7 +27,7 @@ namespace FreedLOW._Maze.Scripts.Enemy
 
         private void Awake()
         {
-            playerLayer = LayerMask.NameToLayer("Hero");
+            playerLayer = 1 << LayerMask.NameToLayer("Hero");
         }
 
         public abstract void Initialize(Transform point, GameObject hero);
@@ -38,7 +39,6 @@ namespace FreedLOW._Maze.Scripts.Enemy
         {
             Vector3 directionToPlayer = player.position - transform.position;
             float playerDetectionRange = directionToPlayer.magnitude;
-            
             float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
 
             if (angleToPlayer <= fieldOfViewAngle * 0.5f)
@@ -47,7 +47,8 @@ namespace FreedLOW._Maze.Scripts.Enemy
                 {
                     if (hit.collider.gameObject.layer == playerLayer)
                     {
-                        return true;
+                        var heroMove = hit.collider.GetComponent<HeroMove>();
+                        return !heroMove.HasInvisibility;
                     }
                 }
             }

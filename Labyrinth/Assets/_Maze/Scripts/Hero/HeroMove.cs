@@ -12,35 +12,39 @@ namespace FreedLOW._Maze.Scripts.Hero
         [SerializeField] private CharacterController characterController;
         [SerializeField] private float movementSpeed;
 
-        private new Camera camera;
-        private IInputService inputService;
+        private Camera _mainCamera;
 
-        public void Construct(IInputService input)
+        public bool HasInvisibility => _heroStats.HasInvisibility;
+        
+        private IInputService _inputService;
+        private HeroStats _heroStats;
+
+        public void Construct(IInputService input, HeroStats heroStats)
         {
-            inputService = input;
+            _inputService = input;
+            _heroStats = heroStats;
         }
         
         private void Awake()
         {
-            camera = Camera.main;
+            _mainCamera = Camera.main;
         }
 
         private void Update()
         {
             Vector3 movementVector = Vector3.zero;
 
-            if (inputService.Axis.sqrMagnitude > Constants.Epsilon)
+            if (_inputService.Axis.sqrMagnitude > Constants.Epsilon)
             {
-                movementVector = camera.transform.TransformDirection(inputService.Axis);
+                movementVector = _mainCamera.transform.TransformDirection(_inputService.Axis);
                 movementVector.y = 0;
                 movementVector.Normalize();
-
                 transform.forward = movementVector;
             }
 
             movementVector += Physics.gravity;
             
-            characterController.Move(movementVector * movementSpeed * Time.deltaTime);
+            characterController.Move(movementVector * movementSpeed * _heroStats.BoostSpeedValue * Time.deltaTime);
         }
 
         public void UpdateProgress(PlayerProgress progress)
@@ -61,7 +65,8 @@ namespace FreedLOW._Maze.Scripts.Hero
         private void Warp(Vector3Data to)
         {
             characterController.enabled = false;
-            transform.position = to.AsUnityVector().ToUpY(y: characterController.height);
+            transform.position = to.AsUnityVector()
+                .ToUpY(y: characterController.height);
             characterController.enabled = true;
         }
 
