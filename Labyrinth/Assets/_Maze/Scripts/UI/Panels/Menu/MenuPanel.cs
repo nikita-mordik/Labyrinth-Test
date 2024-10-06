@@ -20,7 +20,7 @@ namespace FreedLOW._Maze.Scripts.UI.Panels.Menu
         {
             playButton.onClick.AddListener(OnOpenLevelPanel);
             shopButton.onClick.AddListener(OnOpenShopPanel);
-            shopButton.onClick.AddListener(OnOpenWebView);
+            webViewButton.onClick.AddListener(OnOpenWebView);
             
             CreateWebView();
         }
@@ -41,7 +41,7 @@ namespace FreedLOW._Maze.Scripts.UI.Panels.Menu
                 CreateWebView();
             
             _webView.Load("https://www.google.com/");
-            _webView.Show(true, UniWebViewTransitionEdge.Top);
+            _webView.Show();
         }
 
         private void CreateWebView()
@@ -50,6 +50,7 @@ namespace FreedLOW._Maze.Scripts.UI.Panels.Menu
                 _webView = Instantiate(webViewPrefab).GetComponent<UniWebView>();
             
             _webView.OnShouldClose += (view) => {
+                Destroy(_webView.gameObject);
                 _webView = null;
                 return true;
             };

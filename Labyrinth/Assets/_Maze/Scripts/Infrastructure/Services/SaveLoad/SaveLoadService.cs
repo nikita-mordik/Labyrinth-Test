@@ -24,8 +24,6 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.Services.SaveLoad
             {
                 progressesWriter.UpdateProgress(progressService.PlayerProgress);
             }
-
-            Debug.LogError(progressService.PlayerProgress.ToJson());
             
             PlayerPrefs.SetString(ProgressKey, progressService.PlayerProgress.ToJson());
         }
