@@ -8,7 +8,7 @@ namespace FreedLOW._Maze.Scripts.Gameplay
         
         private void LateUpdate()
         {
-            transform.Rotate(transform.up, rotationAngle, Space.World);
+            transform.Rotate(transform.up, rotationAngle * Time.deltaTime, Space.World);
         }
     }
 }
