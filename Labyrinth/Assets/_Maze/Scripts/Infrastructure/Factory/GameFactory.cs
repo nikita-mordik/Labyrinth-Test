@@ -9,17 +9,15 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.Factory
     public class GameFactory : IGameFactory
     {
         private readonly IAssetProvider assetProvider;
-        private readonly IPersistentProgressService progressService;
 
         public List<ISavedProgressReader> ProgressReaders { get; } = new List<ISavedProgressReader>();
         public List<ISavedProgress> ProgressesWriters { get; } = new List<ISavedProgress>();
 
         public GameObject HeroGameObject { get; private set; }
 
-        public GameFactory(IAssetProvider assetProvider, IPersistentProgressService progressService)
+        public GameFactory(IAssetProvider assetProvider)
         {
             this.assetProvider = assetProvider;
-            this.progressService = progressService;
         }
 
         public GameObject CreateHero(Vector3 at)

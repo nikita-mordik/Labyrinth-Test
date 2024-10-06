@@ -1,11 +1,12 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace FreedLOW._Maze.Scripts.UI.Panels.Menu
 {
     public class MenuPanel : MonoBehaviour
     {
-        [SerializeField] private PanelMediator panelMediator;
+        [FormerlySerializedAs("panelMediator")] [SerializeField] private MenuPanelMediator menuPanelMediator;
         [SerializeField] private GameObject webViewPrefab;
 
         [Header("Buttons")]
@@ -26,12 +27,12 @@ namespace FreedLOW._Maze.Scripts.UI.Panels.Menu
 
         private void OnOpenLevelPanel()
         {
-            panelMediator.OpenLevelPanel();
+            menuPanelMediator.OpenLevelPanel();
         }
 
         private void OnOpenShopPanel()
         {
-            panelMediator.OpenShopPanel();
+            menuPanelMediator.OpenShopPanel();
         }
 
         private void OnOpenWebView()

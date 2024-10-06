@@ -1,3 +1,5 @@
+using FreedLOW._Maze.Scripts.Infrastructure.Services;
+using FreedLOW._Maze.Scripts.Infrastructure.Services.PersistentProgress;
 using UnityEngine;
 
 namespace FreedLOW._Maze.Scripts.Enemy
@@ -35,6 +37,7 @@ namespace FreedLOW._Maze.Scripts.Enemy
             agent.enabled = true;
             
             GenerateId();
+            UpdateEnemyData();
         }
 
         private void OnDrawGizmos()

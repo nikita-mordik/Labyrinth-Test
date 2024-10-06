@@ -7,13 +7,14 @@ using FreedLOW._Maze.Scripts.StaticData;
 using FreedLOW._Maze.Scripts.UI.Shop;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace FreedLOW._Maze.Scripts.UI.Panels.Menu
 {
     public class ShopPanel : MonoBehaviour
     {
-        [SerializeField] private PanelMediator panelMediator;
+        [FormerlySerializedAs("panelMediator")] [SerializeField] private MenuPanelMediator menuPanelMediator;
 
         [Header("Buttons")]
         [SerializeField] private Button closeButton;
@@ -64,7 +65,7 @@ namespace FreedLOW._Maze.Scripts.UI.Panels.Menu
 
         private void OnOpenMenuPanel()
         {
-            panelMediator.OpenMenuPanel();
+            menuPanelMediator.OpenMenuPanel();
         }
 
         private void OnBuyShopItem()

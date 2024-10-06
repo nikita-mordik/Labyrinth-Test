@@ -4,13 +4,14 @@ using FreedLOW._Maze.Scripts.Infrastructure.Services.PersistentProgress;
 using FreedLOW._Maze.Scripts.Infrastructure.State;
 using FreedLOW._Maze.Scripts.Infrastructure.State.States;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace FreedLOW._Maze.Scripts.UI.Panels.Menu
 {
     public class LevelPanel : MonoBehaviour
     {
-        [SerializeField] private PanelMediator panelMediator;
+        [FormerlySerializedAs("panelMediator")] [SerializeField] private MenuPanelMediator menuPanelMediator;
         
         [Header("Buttons")]
         [SerializeField] private Button levelOneButton;
@@ -49,21 +50,18 @@ namespace FreedLOW._Maze.Scripts.UI.Panels.Menu
 
         private void OnOpenMenuPanel()
         {
-            panelMediator.OpenMenuPanel();
+            menuPanelMediator.OpenMenuPanel();
         }
 
         private void CheckLevels()
         {
             var playerProgress = AllServices.Container.Single<IPersistentProgressService>().PlayerProgress;
 
-            if (playerProgress.WorldData.CompletedLevelData.IsLevelTwoOpen)
-            {
+            if (playerProgress.WorldData.CompletedLevelData.IsLevelTwoOpen) 
                 levelTwoButton.interactable = true;
-            }
-            else if (playerProgress.WorldData.CompletedLevelData.IsLevelThreeOpen)
-            {
+            
+            if (playerProgress.WorldData.CompletedLevelData.IsLevelThreeOpen) 
                 levelThreeButton.interactable = true;
-            }
         }
     }
 }

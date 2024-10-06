@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace FreedLOW._Maze.Scripts.UI.Panels
 {
-    public class PanelMediator : MonoBehaviour
+    public class MenuPanelMediator : MonoBehaviour
     {
         [SerializeField] private CanvasGroup menuPanel;
         [SerializeField] private CanvasGroup levelPanel;

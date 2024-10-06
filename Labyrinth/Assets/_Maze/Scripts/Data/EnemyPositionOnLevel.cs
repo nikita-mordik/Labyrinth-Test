@@ -9,8 +9,6 @@ namespace FreedLOW._Maze.Scripts.Data
         public Vector3Data Position;
         public Vector3Data Rotation;
 
-        public EnemyPositionOnLevel() { }
-
         public EnemyPositionOnLevel(string id, Vector3Data position, Vector3Data rotation)
         {
             Id = id;

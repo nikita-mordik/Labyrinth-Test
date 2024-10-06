@@ -1,6 +1,7 @@
 using System.Linq;
 using FreedLOW._Maze.Scripts.Data;
 using FreedLOW._Maze.Scripts.Hero;
+using FreedLOW._Maze.Scripts.Infrastructure.Services;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.Identifiers;
 using FreedLOW._Maze.Scripts.Infrastructure.Services.PersistentProgress;
 using UnityEngine;
@@ -47,9 +48,11 @@ namespace FreedLOW._Maze.Scripts.Enemy
                 {
                     if (hit.collider.gameObject.layer == playerLayer)
                     {
-                        var heroMove = hit.collider.GetComponent<HeroMove>();
-                        if (heroMove != null)
-                            return !heroMove.HasInvisibility;
+                        var heroMove = hit.collider.GetComponentInParent<HeroMove>();
+                        if (heroMove != null && heroMove.HasInvisibility)
+                        {
+                            return false;
+                        }
                         
                         return true;
                     }
@@ -59,35 +62,45 @@ namespace FreedLOW._Maze.Scripts.Enemy
             return false;
         }
 
+        protected void UpdateEnemyData()
+        {
+            var progress = AllServices.Container.Single<IPersistentProgressService>().PlayerProgress;
+            if (progress.WorldData.EnemyData.EnemyPositionOnLevels.Count == 0 || 
+                !progress.WorldData.EnemyData.EnemyPositionOnLevels.Exists(t=> t.Id == uniqueId))
+            {
+                progress.WorldData.EnemyData.AddEnemy(uniqueId,
+                    transform.position.AsVectorData(),
+                    transform.rotation.eulerAngles.AsVectorData());
+            }
+        }
+
         public void LoadProgress(PlayerProgress progress)
         {
-            foreach (var enemyPositionOnLevel in progress.WorldData.EnemyData.EnemyPositionOnLevels)
-                         //.Where(enemyPositionOnLevel => enemyPositionOnLevel.Id == uniqueId))
-            {
-                transform.position = enemyPositionOnLevel.Position.AsUnityVector();
-                var rotation = transform.rotation;
-                rotation.eulerAngles = enemyPositionOnLevel.Rotation.AsUnityVector();
-                transform.rotation = rotation;
-            }
+            if (progress.WorldData.EnemyData.EnemyPositionOnLevels.Count == 0)
+                return;
+            
+            agent.ResetPath();
+            agent.enabled = false;
+            
+            var enemyData = progress.WorldData.EnemyData.EnemyPositionOnLevels
+                .First(t => t.Id == uniqueId);
+            transform.position = enemyData.Position.AsUnityVector();
+            var rotation = transform.rotation;
+            rotation.eulerAngles = enemyData.Rotation.AsUnityVector();
+            transform.rotation = rotation;
+            
+            agent.enabled = true;
         }
 
         public void UpdateProgress(PlayerProgress progress)
         {
-            if (progress.WorldData.EnemyData.EnemyPositionOnLevels.Count <= 0 || 
-                progress.WorldData.EnemyData.EnemyPositionOnLevels.All(t => t.Id != uniqueId))
-            {
-                progress.WorldData.EnemyData.AddEnemy(uniqueId, transform.position.AsVectorData(),
-                    transform.rotation.eulerAngles.AsVectorData());
-            }
-            else
-            {
-                foreach (var enemyPositionOnLevel in progress.WorldData.EnemyData.EnemyPositionOnLevels
-                             .Where(enemyPositionOnLevel => enemyPositionOnLevel.Id == uniqueId))
-                {
-                    enemyPositionOnLevel.Position = transform.position.AsVectorData();
-                    enemyPositionOnLevel.Rotation = transform.rotation.eulerAngles.AsVectorData();
-                }   
-            }
+            if (progress.WorldData.GameData.IsRestart)
+                return;
+                
+            var enemyData = progress.WorldData.EnemyData.EnemyPositionOnLevels
+                .First(t => t.Id == uniqueId);
+            enemyData.Position = transform.position.AsVectorData();
+            enemyData.Rotation = transform.rotation.eulerAngles.AsVectorData();
         }
     }
 }

@@ -5,7 +5,7 @@ namespace FreedLOW._Maze.Scripts.Data
     [Serializable]
     public class MoneyData
     {
-        public int Money { get; private set; }
+        public int Money;
         public Action<int> OnMoneyAmountChanged;
 
         public MoneyData(int money)

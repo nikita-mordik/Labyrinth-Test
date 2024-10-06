@@ -1,18 +1,22 @@
-﻿namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
+﻿using FreedLOW._Maze.Scripts.Infrastructure.Services.PersistentProgress;
+
+namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
 {
     public class GameLoopState : IState
     {
-        public GameLoopState(GameStateMachine gameStateMachine)
-        {
-            
-        }
+        private readonly IPersistentProgressService _progressService;
 
-        public void Exit()
+        public GameLoopState(GameStateMachine gameStateMachine, IPersistentProgressService progressService)
         {
-            
+            _progressService = progressService;
         }
 
         public void Enter()
+        {
+            _progressService.PlayerProgress.WorldData.GameData.IsRestart = false;
+        }
+
+        public void Exit()
         {
             
         }

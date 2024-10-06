@@ -15,5 +15,10 @@ namespace FreedLOW._Maze.Scripts.Data
             Y = y;
             Z = z;
         }
+
+        public override string ToString()
+        {
+            return $"({X}, {Y}, {Z})";
+        }
     }
 }

@@ -29,12 +29,12 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
 
         public async void Enter()
         {
-            await sceneLoader.LoadSceneAsync(SceneName, onSceneLoaded: EnterLoadLevel);
+            await sceneLoader.LoadSceneAsync(SceneName, onSceneLoaded: EnterLoadProgress);
         }
 
         public void Exit() { }
 
-        private void EnterLoadLevel()
+        private void EnterLoadProgress()
         {
             gameStateMachine.Enter<LoadProgressState>();
         }
@@ -66,8 +66,7 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
         private void RegisterFactories()
         {
             allServices.RegisterSingle<IGameFactory>(new GameFactory(
-                allServices.Single<IAssetProvider>(),  
-                allServices.Single<IPersistentProgressService>()));
+                allServices.Single<IAssetProvider>()));
 
             allServices.RegisterSingle<IUIFactory>(new UIFactory(allServices.Single<IAssetProvider>()));
         }

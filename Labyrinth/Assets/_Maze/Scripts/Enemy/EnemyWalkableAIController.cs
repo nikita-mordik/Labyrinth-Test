@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using FreedLOW._Maze.Scripts.Infrastructure.Services;
+using FreedLOW._Maze.Scripts.Infrastructure.Services.PersistentProgress;
+using FreedLOW._Maze.Scripts.Infrastructure.Services.SaveLoad;
 using UnityEngine;
 
 namespace FreedLOW._Maze.Scripts.Enemy
@@ -38,6 +41,7 @@ namespace FreedLOW._Maze.Scripts.Enemy
             
             SetNextWaypoint();
             GenerateId();
+            UpdateEnemyData();
         }
 
         private void SetNextWaypoint()
@@ -50,11 +54,10 @@ namespace FreedLOW._Maze.Scripts.Enemy
 
         private void OnDrawGizmos()
         {
-            Gizmos.color=Color.magenta;
+            Gizmos.color = Color.magenta;
             
             Vector3 directionToPlayer = player.position - transform.position;
             float playerDetectionRange = directionToPlayer.magnitude;
-            
             float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
 
             if (angleToPlayer <= fieldOfViewAngle * 0.5f)

@@ -19,7 +19,7 @@ namespace FreedLOW._Maze.Scripts.Data
             EnemyData = new EnemyData();
             CompletedLevelData = new CompletedLevelData(isLevelTwoOpen: false, isLevelThreeOpen: false);
             MoneyData = new MoneyData(100);
-            AbilityData = new AbilityData(new BoostAbility(1), new InvisibilityAbility(0));
+            AbilityData = new AbilityData(new BoostAbility(1), new InvisibilityAbility(1));
         }
     }
 }

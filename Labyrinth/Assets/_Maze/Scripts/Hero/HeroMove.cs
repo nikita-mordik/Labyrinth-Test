@@ -57,9 +57,19 @@ namespace FreedLOW._Maze.Scripts.Hero
             if (CurrentLevel() == progress.WorldData.PositionOnLevel.LevelName)
             {
                 var savedPosition = progress.WorldData.PositionOnLevel.Position;
-                if (savedPosition != null) 
+                if (CheckIfSavedPositionExist(savedPosition)) 
                     Warp(to: savedPosition);
             }
+        }
+
+        private bool CheckIfSavedPositionExist(Vector3Data savedPosition)
+        {
+            var hasData = savedPosition != null;
+            if (!hasData) 
+                return false;
+            
+            var unityVector = savedPosition.AsUnityVector();
+            return unityVector.x != 0f && unityVector.y != 0f && unityVector.z != 0f;
         }
 
         private void Warp(Vector3Data to)

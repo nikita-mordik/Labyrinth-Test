@@ -7,5 +7,6 @@ namespace FreedLOW._Maze.Scripts.Data
     {
         public int TotalSeconds;
         public int AttemptsCount;
+        public bool IsRestart;
     }
 }

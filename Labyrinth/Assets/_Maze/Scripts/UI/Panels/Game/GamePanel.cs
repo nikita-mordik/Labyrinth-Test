@@ -21,7 +21,7 @@ namespace FreedLOW._Maze.Scripts.UI.Panels.Game
         private const int MillisecondsDelay = 1000;
         private const string MoneyPattern = "Money: {0} $";
 
-        private CancellationTokenSource cancellationToken = new();
+        private CancellationTokenSource cancellationToken;
         private int attemptsCount;
         private int seconds;
 
@@ -33,6 +33,8 @@ namespace FreedLOW._Maze.Scripts.UI.Panels.Game
             this.gameEventHandlerService = gameEventHandlerService;
             _playerProgress = progressService.PlayerProgress;
             _playerProgress.WorldData.MoneyData.OnMoneyAmountChanged += MoneyAmountChanged;
+            
+            MoneyAmountChanged(_playerProgress.WorldData.MoneyData.Money);
         }
 
         private void Start()
@@ -43,6 +45,7 @@ namespace FreedLOW._Maze.Scripts.UI.Panels.Game
         private void OnDestroy()
         {
             _playerProgress.WorldData.MoneyData.OnMoneyAmountChanged -= MoneyAmountChanged;
+            cancellationToken?.Cancel();
         }
 
         public void LoadProgress(PlayerProgress progress)
@@ -62,6 +65,23 @@ namespace FreedLOW._Maze.Scripts.UI.Panels.Game
         private void MoneyAmountChanged(int moneyCount)
         {
             moneyText.text = string.Format(MoneyPattern, moneyCount);
+        }
+
+        private void OnPause()
+        {
+            pausePanel.ShowPausePanel();
+        }
+
+        private void OnChangeAttempts() => 
+            attemptsText.text = $"Number of attempts: {attemptsCount}";
+
+        private void UpdateUI(int leftSecond)
+        {
+            cancellationToken?.Cancel();
+            cancellationToken = new CancellationTokenSource();
+            
+            OnChangeAttempts();
+            StartTimer(leftSecond);
         }
 
         private async void StartTimer(int totalSeconds)
@@ -89,23 +109,6 @@ namespace FreedLOW._Maze.Scripts.UI.Panels.Game
             }
             
             gameEventHandlerService.InvokeOnLooseGame();
-        }
-
-        private void OnPause()
-        {
-            pausePanel.ShowPausePanel();
-        }
-
-        private void OnChangeAttempts() => 
-            attemptsText.text = $"Number of attempts: {attemptsCount}";
-
-        private void UpdateUI(int leftSecond)
-        {
-            cancellationToken?.Cancel();
-            cancellationToken = new CancellationTokenSource();
-            
-            OnChangeAttempts();
-            StartTimer(leftSecond);
         }
     }
 }

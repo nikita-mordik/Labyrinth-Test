@@ -75,30 +75,6 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
             InitializeEnemies(hero);
         }
 
-        private void InitializeEnemies(GameObject hero)
-        {
-            GameObject[] immovablePoints = GameObject.FindGameObjectsWithTag(Tags.ImmovablePoint);
-            GameObject[] walkablePoints = GameObject.FindGameObjectsWithTag(Tags.WalkablePoint);
-
-            for (int i = 0; i < immovablePoints.Length; i++)
-            {
-                var point = immovablePoints[i].transform;
-                var enemy = gameFactory.CreateEnemy(PatrollingType.Immovable);
-                enemy.GetComponent<BaseAIEnemy>().Construct(identifierService);
-                enemy.GetComponent<EnemyImmovableAIController>()
-                    .Initialize(point, hero);
-            }
-
-            for (int i = 0; i < walkablePoints.Length; i++)
-            {
-                var point = walkablePoints[i].transform;
-                var enemy = gameFactory.CreateEnemy(PatrollingType.Walkable);
-                enemy.GetComponent<BaseAIEnemy>().Construct(identifierService);
-                enemy.GetComponent<EnemyWalkableAIController>()
-                    .Initialize(point, hero);
-            }
-        }
-
         private GameObject InitializeHero(Vector3 at, Quaternion pointRotation)
         {
             _heroStats = new HeroStats(3, _coroutineRunner);
@@ -122,10 +98,34 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State.States
             hud.GetComponentInChildren<PausePanel>()
                 .Construct(gameStateMachine, saveLoadService, gameFactory, progressService);
             hud.GetComponentInChildren<EndGamePanel>()
-                .Construct(gameStateMachine, gameEventHandlerService, progressService, gameFactory);
+                .Construct(gameStateMachine, gameEventHandlerService, progressService, gameFactory, saveLoadService);
         }
 
         private void CameraFollow(GameObject follower) => 
             Camera.main.GetComponent<CameraFollow>().Follow(follower);
+
+        private void InitializeEnemies(GameObject hero)
+        {
+            GameObject[] immovablePoints = GameObject.FindGameObjectsWithTag(Tags.ImmovablePoint);
+            GameObject[] walkablePoints = GameObject.FindGameObjectsWithTag(Tags.WalkablePoint);
+
+            for (int i = 0; i < immovablePoints.Length; i++)
+            {
+                var point = immovablePoints[i].transform;
+                var enemy = gameFactory.CreateEnemy(PatrollingType.Immovable);
+                enemy.GetComponent<BaseAIEnemy>().Construct(identifierService);
+                enemy.GetComponent<EnemyImmovableAIController>()
+                    .Initialize(point, hero);
+            }
+
+            for (int i = 0; i < walkablePoints.Length; i++)
+            {
+                var point = walkablePoints[i].transform;
+                var enemy = gameFactory.CreateEnemy(PatrollingType.Walkable);
+                enemy.GetComponent<BaseAIEnemy>().Construct(identifierService);
+                enemy.GetComponent<EnemyWalkableAIController>()
+                    .Initialize(point, hero);
+            }
+        }
     }
 }

@@ -23,12 +23,12 @@ namespace FreedLOW._Maze.Scripts.Infrastructure.State
                 [typeof(BootstrapState)] = new BootstrapState(this, sceneLoader, services),
                 [typeof(LoadProgressState)] = new LoadProgressState(this, services.Single<IPersistentProgressService>(),
                     services.Single<ISaveLoadService>()),
-                [typeof(LoadMenuState)] = new LoadMenuState(this, sceneLoader),
+                [typeof(LoadMenuState)] = new LoadMenuState(this, sceneLoader, services.Single<IGameFactory>()),
                 [typeof(LoadLevelState)] = new LoadLevelState(this, sceneLoader, services.Single<IGameFactory>(),
                     services.Single<IPersistentProgressService>(), services.Single<IGameEventHandlerService>(),
                     services.Single<IInputService>(), services.Single<ISaveLoadService>(),
                     services.Single<IIdentifierService>(), coroutine),
-                [typeof(GameLoopState)] = new GameLoopState(this),
+                [typeof(GameLoopState)] = new GameLoopState(this, services.Single<IPersistentProgressService>()),
                 [typeof(PauseState)] = new PauseState(this),
             };
         }
